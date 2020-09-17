@@ -1,15 +1,19 @@
 # Exiftool Scripts for Google Photos from Google Takeout
 ## TL;DR
 To fix the metadata and clobber the originals:
+```
 exiftool -@ use_json.args <takeout_dir>
 exiftool -@ jpg_to_png.args <takeout_dir>
 exiftool -@ png_to_jpg.args <takeout_dir>
 exiftool -@ was_jpg_now_png.args <takeout_dir>
 exiftool -@ was_png_now_jpg.args <takeout_dir>
+```
 
 And if you like gambling:
+```
 exiftool -@ looks_like_a_date.args <takeout_dir>
 exiftool -@ date_from_folder.args <takeout_dir>
+```
 
 ## Background
 The photos I have taken over the years are scattered across a large number of
@@ -78,9 +82,10 @@ don't have any metadata. But Google Takeout arranges all files from the time
 they were created and so use that fact to add metadata.
 
 There are some big gotchas here.
-- Only supports YYYY MM DD and no times
-- Timezone might be off and so dates might be off by a day
-- Doesn't understand when the photo was taken only when Google Photos was made
+
+* Only supports YYYY-MM-DD and no times
+* Timezone might be off and so dates might be off by a day
+* Doesn't understand when the photo was taken only when Google Photos was made
 aware of it
 
 I felt this was better than nothing and so in my local media server, I have
@@ -107,8 +112,8 @@ not sure which one is right so just went for a blanket approach.
 ## Tweaks
 Don't want the scripts to clobber the originals? Remove -overwrite_original
 
-date_from_folder.args doesn't seem to account for timezone? Look at the ExifTool
-docs for "shift" and "globaltimeshift".
+date_from_folder.args doesn't seem to account for timezone? Look at the [ExifTool
+docs](https://exiftool.org/exiftool_pod.html) for "shift" and "globaltimeshift".
 
 ## Improvements
 The JSON files have album info. Maybe that can be merged too?
