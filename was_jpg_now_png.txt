@@ -1,0 +1,37 @@
+# Fill in from Google's JSON for those JPEGs that were originally PNGs
+
+# Start by looking at all PNGs
+-ext
+png
+
+# Recursive
+-r
+
+# Show processed filenames
+-v0
+
+# Time from JSON will be in epoch seconds
+-d
+%s
+
+# Attempt to modify media only if the info doesn't already exist
+-if
+$Filetype eq "PNG" and not $PNG:CreationTime
+
+# Attempt to read in the previous jpg.json. %f is without the extension
+-tagsfromfile
+%d%f.jpg.json
+
+#
+# Write out the tags
+#
+
+# EXIF for regular JPG photos
+-AllDates<PhotoTakenTimeTimestamp
+
+# PNG-specific
+-XMP-Exif:DateTimeOriginal<PhotoTakenTimeTimestamp
+-PNG:CreationTime<PhotoTakenTimeTimestamp
+
+# Clobber everything
+-overwrite_original

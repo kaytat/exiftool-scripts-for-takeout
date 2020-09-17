@@ -1,0 +1,56 @@
+# Use filename as the date
+
+# Look at all media files and ignore JSON
+--ext
+json
+
+# Recursive
+-r
+
+# Show processed filenames
+-v0
+
+# Attempt to modify media only if the info doesn't already exist
+-if
+($Filetype eq "MP4" and not $quicktime:TrackCreateDate) or ($Filetype eq "MP4" and $quicktime:TrackCreateDate eq "0000:00:00 00:00:00") or ($Filetype eq "JPEG" and not $exif:DateTimeOriginal) or ($Filetype eq "PNG" and not $PNG:CreationTime)
+
+# Look for a filename that looks like a date.
+# The logic is:
+#   anything
+#   anything that's not a number (to make sure the next sequence of numbers is
+#     exactly 8 long)
+#   sequence of 8 numbers (this is meant to be YYYYMMDD)
+#   optional separator
+#   sequence of 6 numbers (this is meant to be HHMMSS)
+#   anything that not a number (to make sure long runs of numbers are rejected)
+#   anything that's not a number (to get to the .extension)
+#   .extension
+-if
+$Filename =~ /.*[^0-9]([0-9]{8}.?[0-9]{6})[^0-9].*/
+
+# Sanity check year equal or less than the current year
+-if
+(${Filename;s/.*[^0-9]([0-9]{4})[0-9]{4}.?([0-9]{6})[^0-9].*/$1/}) <= ${now;s/^([0-9]{4}).*/$1/}
+
+#
+# Write out the tags. Extract the YYYYMMDDHHMMSS date from the filename and
+# feed it into the various date/time tags. Although not strictly the
+# 'YYYY:MM:DD HH:MM:SS' format expected by exiftool, the tools seems smart
+# enough to handle anything that looks close to a legitimate date/time.
+#
+
+# EXIF for regular JPEG photos
+-AllDates<${filename;s/.*[^0-9]([0-9]{8}.?[0-9]{6})[^0-9].*/$1/}
+
+# PNG-specific
+-XMP-Exif:DateTimeOriginal<${filename;s/.*[^0-9]([0-9]{8}.?[0-9]{6})[^0-9].*/$1/}
+-PNG:CreationTime<${filename;s/.*[^0-9]([0-9]{8}.?[0-9]{6})[^0-9].*/$1/}
+
+# Quicktime / MP4
+-QuickTime:TrackCreateDate<${filename;s/.*[^0-9]([0-9]{8}.?[0-9]{6})[^0-9].*/$1/}
+-QuickTime:TrackModifyDate<${filename;s/.*[^0-9]([0-9]{8}.?[0-9]{6})[^0-9].*/$1/}
+-QuickTime:MediaCreateDate<${filename;s/.*[^0-9]([0-9]{8}.?[0-9]{6})[^0-9].*/$1/}
+-QuickTime:MediaModifyDate<${filename;s/.*[^0-9]([0-9]{8}.?[0-9]{6})[^0-9].*/$1/}
+
+# Clobber everything
+-overwrite_original

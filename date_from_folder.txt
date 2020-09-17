@@ -1,0 +1,40 @@
+# Use the folder as the date
+
+# Look at all media files and ignore JSON
+--ext
+json
+
+# Recursive
+-r
+
+# Show processed filenames
+-v0
+
+# Attempt to modify media only if the info doesn't already exist
+-if
+($Filetype eq "MP4" and not $quicktime:TrackCreateDate) or ($Filetype eq "MP4" and $quicktime:TrackCreateDate eq "0000:00:00 00:00:00") or ($Filetype eq "JPEG" and not $exif:DateTimeOriginal) or ($Filetype eq "PNG" and not $PNG:CreationTime)
+
+# Check that the parent directory is a date of the form YYYY-MM-DD
+-if
+$filepath =~ /.*\/([0-9]{4}-[0-9]{2}-[0-9]{2}).*\/.*/
+
+#
+# Write out the tags. Since this only extracts directory names,
+# pad the HH:MM:SS with 0.
+#
+
+# EXIF for regular JPG photos
+-AllDates<${filepath;s/.*\/([0-9]{4}-[0-9]{2}-[0-9]{2}).*\/.*/$1 00:00:00/}
+
+# PNG-specific
+-XMP-Exif:DateTimeOriginal<${filepath;s/.*\/([0-9]{4}-[0-9]{2}-[0-9]{2}).*\/.*/$1 00:00:00/}
+-PNG:CreationTime<${filepath;s/.*\/([0-9]{4}-[0-9]{2}-[0-9]{2}).*\/.*/$1 00:00:00/}
+
+# Quicktime / MP4
+-QuickTime:TrackCreateDate<${filepath;s/.*\/([0-9]{4}-[0-9]{2}-[0-9]{2}).*\/.*$/$1 00:00:00/}
+-QuickTime:TrackModifyDate<${filepath;s/.*\/([0-9]{4}-[0-9]{2}-[0-9]{2}).*\/.*$/$1 00:00:00/}
+-QuickTime:MediaCreateDate<${filepath;s/.*\/([0-9]{4}-[0-9]{2}-[0-9]{2}).*\/.*$/$1 00:00:00/}
+-QuickTime:MediaModifyDate<${filepath;s/.*\/([0-9]{4}-[0-9]{2}-[0-9]{2}).*\/.*$/$1 00:00:00/}
+
+# Clobber everything
+-overwrite_original
