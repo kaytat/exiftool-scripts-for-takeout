@@ -8,7 +8,7 @@ exiftool -@ was_jpg_now_png.args <takeout_dir>
 exiftool -@ was_png_now_jpg.args <takeout_dir>
 
 And if you like gambling:
-exiftool -@ use_img_filename.args <takeout_dir>
+exiftool -@ looks_like_a_date.args <takeout_dir>
 exiftool -@ date_from_folder.args <takeout_dir>
 
 ## Background
@@ -60,7 +60,7 @@ Out of the thousands of photos, only a handful actually have a JSON file. This
 is very disappointing and very unsatisfactory. In an attempt to fill in more
 metadata, use some scripts that take a leap of faith.
 
-### use_img_filename.args
+### looks_like_a_date.args
 Some filenames look to have the date and time encoded in the filename. Use that
 to fill in the metadata tags.
 
