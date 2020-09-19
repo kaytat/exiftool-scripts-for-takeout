@@ -124,5 +124,11 @@ scripts are supported on all Windows/Mac/Linux.
 ## Tweaks
 Don't want the scripts to clobber the originals? Remove -overwrite_original
 
+Are there photos or albums you thought you deleted but still remain? Try
+the [album archive](https://get.google.com/albumarchive) and especially the
+"Auto Backup" album. Not sure what this is, but there were a lot old / unwanted
+photos in there.
+
 ## Improvements
 The JSON files have album info. Maybe that can be merged too?
+	
