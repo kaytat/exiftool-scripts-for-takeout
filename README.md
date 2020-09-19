@@ -109,11 +109,20 @@ to understand the tags.
 -QuickTime:MediaModifyDate<PhotoTakenTimeTimestamp are used for mp4 files. I'm
 not sure which one is right so just went for a blanket approach.
 
+ConvertUnixTime() is used to convert the UTC timestamp in the JSON to a local
+time.
+
+## Caveats
+-overwrite_original is used because I still have all the zips from Takeout.
+
+Timezones and UTC is still a mystery and I can't get it right. Sometimes
+the files/JSON are just bad.
+
+This was all done on a Windows 10 laptop. I don't know if everything in the
+scripts are supported on all Windows/Mac/Linux.
+
 ## Tweaks
 Don't want the scripts to clobber the originals? Remove -overwrite_original
-
-date_from_folder.args doesn't seem to account for timezone? Look at the [ExifTool
-docs](https://exiftool.org/exiftool_pod.html) for "shift" and "globaltimeshift".
 
 ## Improvements
 The JSON files have album info. Maybe that can be merged too?
