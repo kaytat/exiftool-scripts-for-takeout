@@ -131,4 +131,3 @@ photos in there.
 
 ## Improvements
 The JSON files have album info. Maybe that can be merged too?
-	
