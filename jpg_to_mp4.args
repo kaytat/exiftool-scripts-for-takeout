@@ -1,0 +1,21 @@
+# Rename MP4s that were incorrectly marked with the JPEG extension
+
+# Recursive
+-r
+
+# Show processed filenames
+-v0
+
+# Look for JPEGs ...
+-ext
+jpg
+
+# ... whose content is MP4 ...
+-if
+$Filetype eq "MP4"
+
+# ... and rename to mp4
+-filename=%f.mp4
+
+# Clobber everything
+-overwrite_original

@@ -1,4 +1,4 @@
-# Rename JPEGs that incorrectly marked with the PNG extension
+# Rename PNGs that were incorrectly marked with the JPEG extension
 
 # Recursive
 -r
@@ -6,7 +6,7 @@
 # Show processed filenames
 -v0
 
-# Look for JPGs ...
+# Look for JPEGs ...
 -ext
 jpg
 
