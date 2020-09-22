@@ -3,8 +3,10 @@
 To fix the metadata and clobber the originals:
 ```
 exiftool -@ use_json.args <takeout_dir>
+exiftool -@ jpg_to_mp4.args <takeout_dir>
 exiftool -@ jpg_to_png.args <takeout_dir>
 exiftool -@ png_to_jpg.args <takeout_dir>
+exiftool -@ was_jpg_now_mp4.args <takeout_dir>
 exiftool -@ was_jpg_now_png.args <takeout_dir>
 exiftool -@ was_png_now_jpg.args <takeout_dir>
 ```
@@ -48,12 +50,16 @@ The scripts should be run in the following order
 If the date-related metadata tags don't exist and the JSON file exists, merge
 the tags.
 
+### jpg_to_mp4.args
+Rename .jpg files that are actually MP4 files to have the .mp4 extension
+
 ### jpg_to_png.args
 Rename .jpg files that are actually PNG files to have the .png extension
 
 ### png_to_jpg.args
 Rename .png files that are actually JPEG files to have the .jpg extension
 
+### was_jpg_now_mp4.args
 ### was_jpg_now_png.args
 ### was_png_now_jpg.args
 For those files renamed above, if the date-related metadata tags don't exist and
