@@ -14,6 +14,7 @@ exiftool -@ was_png_now_jpg.args <takeout_dir>
 And if you like gambling:
 ```
 exiftool -@ looks_like_a_date.args <takeout_dir>
+exiftool -@ burst.args <takeout_dir>
 exiftool -@ date_from_folder.args <takeout_dir>
 ```
 
@@ -81,6 +82,12 @@ instance, "VID_32100102_123456.mp4" will be rejected but
 
 This is error-prone and I did have to manually adjust some files after running
 this script.
+
+### burst.args
+This is a tweak to the script above in an attempt to extract the time from
+filenames of the form 00000IMG_00000_BURST20180901101751159_COVER.jpg.
+
+From (https://github.com/kaytat/exiftool-scripts-for-takeout/issues/1)
 
 ### date_from_folder.args
 Even after the first leap of faith scripts, there are still loads of files that
