@@ -1,6 +1,16 @@
 # Exiftool Scripts for Google Photos from Google Takeout
 ## TL;DR
 To fix the metadata and clobber the originals:
+```bash
+fix-metadata.sh <takeout_dir>
+```
+
+And if you like gambling:
+```bash
+fix-metadata.sh <takeout_dir> --unsafe
+```
+
+Or if you want to run the scripts yourself:
 ```
 exiftool -@ use_json.args <takeout_dir>
 exiftool -@ jpg_to_mp4.args <takeout_dir>
