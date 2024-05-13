@@ -1,0 +1,34 @@
+# Fill in from Google's JSON for those JPEGs that were originally PNGSs
+
+# Start by looking at all JPEGs
+-ext
+jpg
+
+# Recursive
+-r
+
+# Show processed filenames
+-v0
+
+# Check if the corresponding JSON exists
+-if
+(-e "${Directory}/${Filename;s/\.jpg/.heic.json/i}")
+
+# Attempt to modify media only if the info doesn't already exist
+-if
+$Filetype eq "JPEG" and not $exif:DateTimeOriginal
+
+# Attempt to read in the previous heic.json. %f is without the extension
+-tagsfromfile
+%d%f.heic.json
+
+#
+# Write out the tags. Use ConvertUnixTime to try and convert the UTC timestamp
+# to a reasonable local EXIF string.
+#
+
+# EXIF for regular JPG photos
+-AllDates<${PhotoTakenTimeTimestamp;$_=ConvertUnixTime($_,1)}
+
+# Clobber everything
+-overwrite_original
