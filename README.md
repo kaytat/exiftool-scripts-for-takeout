@@ -6,9 +6,11 @@ exiftool -@ use_json.args <takeout_dir>
 exiftool -@ jpg_to_mp4.args <takeout_dir>
 exiftool -@ jpg_to_png.args <takeout_dir>
 exiftool -@ png_to_jpg.args <takeout_dir>
+exiftool -@ heic_to_jpg.args <takeout_dir>
 exiftool -@ was_jpg_now_mp4.args <takeout_dir>
 exiftool -@ was_jpg_now_png.args <takeout_dir>
 exiftool -@ was_png_now_jpg.args <takeout_dir>
+exiftool -@ was_heic_now_jpg.args <takeout_dir>
 ```
 
 And if you like gambling:
@@ -60,9 +62,13 @@ Rename .jpg files that are actually PNG files to have the .png extension
 ### png_to_jpg.args
 Rename .png files that are actually JPEG files to have the .jpg extension
 
+### heic_to_jpg.args
+Rename .heic files that are actually JPEG files to have the .jpg extension
+
 ### was_jpg_now_mp4.args
 ### was_jpg_now_png.args
 ### was_png_now_jpg.args
+### was_heic_now_jpg.args
 For those files renamed above, if the date-related metadata tags don't exist and
 the JSON file exists, merge the tags.
 

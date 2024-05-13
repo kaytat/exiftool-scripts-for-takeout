@@ -1,0 +1,21 @@
+# Rename JPEGs that were incorrectly marked with the PNG extension
+
+# Recursive
+-r
+
+# Show processed filenames
+-v0
+
+# Look for PNGs ...
+-ext
+heic
+
+# ... whose content is JPEG ...
+-if
+$Filetype eq "JPEG"
+
+# ... and rename to jpg
+-filename=%f.jpg
+
+# Clobber everything
+-overwrite_original
