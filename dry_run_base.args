@@ -1,0 +1,23 @@
+# Find media files with missing time info that have an associated metadata file.
+
+# Look at all media files and ignore JSON
+--ext
+json
+
+# Recursive
+-r
+
+# Show processed filenames
+-v0
+
+# Check if the corresponding JSON exists
+-if
+(-e "${Directory}/${Filename}.$JSON_NAME")
+
+# Attempt to modify media only if the info doesn't already exist
+-if
+($Filetype eq "MP4" and not $quicktime:TrackCreateDate) or ($Filetype eq "MP4" and $quicktime:TrackCreateDate eq "0000:00:00 00:00:00") or ($Filetype eq "JPEG" and not $exif:DateTimeOriginal) or ($Filetype eq "PNG" and not $PNG:CreationTime)
+
+# Print out file that will be modified
+-p
+${Directory}/${Filename}.$JSON_NAME for updating ${Directory}/${Filename}

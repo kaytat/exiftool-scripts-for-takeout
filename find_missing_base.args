@@ -1,0 +1,19 @@
+# Find media files with missing time info
+
+# Look at all media files and ignore JSON
+--ext
+json
+
+# Recursive
+-r
+
+# Show processed filenames
+-v0
+
+# Attempt to modify media only if the info doesn't already exist
+-if
+($Filetype eq "MP4" and not $quicktime:TrackCreateDate) or ($Filetype eq "MP4" and $quicktime:TrackCreateDate eq "0000:00:00 00:00:00") or ($Filetype eq "JPEG" and not $exif:DateTimeOriginal) or ($Filetype eq "PNG" and not $PNG:CreationTime)
+
+# Print out file is missing the time tags
+-p
+${Directory}/${Filename} missing time info

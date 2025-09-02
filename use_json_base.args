@@ -1,0 +1,40 @@
+# Fill in from Google's JSON
+
+# Look at all media files and ignore JSON
+--ext
+json
+
+# Recursive
+-r
+
+# Show processed filenames
+-v0
+
+# Check if the corresponding JSON exists
+-if
+(-e "${Directory}/${Filename}.$JSON_NAME")
+
+# Attempt to modify media only if the info doesn't already exist
+-if
+($Filetype eq "MP4" and not $quicktime:TrackCreateDate) or ($Filetype eq "MP4" and $quicktime:TrackCreateDate eq "0000:00:00 00:00:00") or ($Filetype eq "JPEG" and not $exif:DateTimeOriginal) or ($Filetype eq "PNG" and not $PNG:CreationTime)
+
+#
+# Write out the tags. Use ConvertUnixTime to try and convert the UTC timestamp
+# to a reasonable local EXIF string.
+#
+
+# EXIF for regular JPG photos
+-AllDates<${PhotoTakenTimeTimestamp;$_=ConvertUnixTime($_,1)}
+
+# PNG-specific
+-XMP-Exif:DateTimeOriginal<${PhotoTakenTimeTimestamp;$_=ConvertUnixTime($_,1)}
+-PNG:CreationTime<${PhotoTakenTimeTimestamp;$_=ConvertUnixTime($_,1)}
+
+# Quicktime / MP4. Assume that timestamp is in UTC.
+-QuickTime:TrackCreateDate<${PhotoTakenTimeTimestamp;$_=ConvertUnixTime($_,0)}
+-QuickTime:TrackModifyDate<${PhotoTakenTimeTimestamp;$_=ConvertUnixTime($_,0)}
+-QuickTime:MediaCreateDate<${PhotoTakenTimeTimestamp;$_=ConvertUnixTime($_,0)}
+-QuickTime:MediaModifyDate<${PhotoTakenTimeTimestamp;$_=ConvertUnixTime($_,0)}
+
+# Clobber everything
+-overwrite_original

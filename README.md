@@ -1,22 +1,43 @@
 # Exiftool Scripts for Google Photos from Google Takeout
-## TL;DR
-To fix the metadata and clobber the originals:
+## TL;DR (Update 9/1/2025)
+Find files that are missing time info:
 ```
-exiftool -@ use_json.args <takeout_dir>
-exiftool -@ jpg_to_mp4.args <takeout_dir>
-exiftool -@ jpg_to_png.args <takeout_dir>
-exiftool -@ png_to_jpg.args <takeout_dir>
-exiftool -@ was_jpg_now_mp4.args <takeout_dir>
-exiftool -@ was_jpg_now_png.args <takeout_dir>
-exiftool -@ was_png_now_jpg.args <takeout_dir>
+find_missing.bat path_to_exiftool path_to_photos
 ```
 
-And if you like gambling:
+Get a list of media that has metadata that might have time info:
 ```
-exiftool -@ looks_like_a_date.args <takeout_dir>
-exiftool -@ burst.args <takeout_dir>
-exiftool -@ date_from_folder.args <takeout_dir>
+dry_run.bat path_to_exiftool path_to_photos
 ```
+
+Update media with time info from metadata:
+```
+use_json.bat path_to_exiftool path_to_photos
+```
+
+## Recent Changes (Update 9/1/2025)
+
+### Metadata filename extension changes
+When this project was first created, the metadata was in a file that appended
+".json" to the end of the media file. This has changed and now the extension
+is ".supplemental-metadata.json"
+
+But some of the time, the filenames seem to get truncated and so the extension
+becomes ".supplemental-metada.json". Notice the missing "ta" at the end of data.
+
+This can be as short as ".s.json".
+
+The batch files are built to try and account for these variations.
+
+### Directory flattening
+
+Previously the media files were split by YYYY-MM-DD. Now, it seems like it's 
+much flatter and I only see "Photos from YYYY".
+
+### metadata.json missing for non-album directories
+
+Previously, there was a metadata.json file for each dated directory. But they
+don't seem to exist anymore
 
 ## Background
 The photos I have taken over the years are scattered across a large number of
@@ -44,82 +65,20 @@ themselves.
 This way a tool like Lightroom can read the photos in and have all the
 metadata available.
 
-## Scripts
-The scripts should be run in the following order
-
-### use_json.args
-If the date-related metadata tags don't exist and the JSON file exists, merge
-the tags.
-
-### jpg_to_mp4.args
-Rename .jpg files that are actually MP4 files to have the .mp4 extension
-
-### jpg_to_png.args
-Rename .jpg files that are actually PNG files to have the .png extension
-
-### png_to_jpg.args
-Rename .png files that are actually JPEG files to have the .jpg extension
-
-### was_jpg_now_mp4.args
-### was_jpg_now_png.args
-### was_png_now_jpg.args
-For those files renamed above, if the date-related metadata tags don't exist and
-the JSON file exists, merge the tags.
-
-## Scripts that take a leap of faith
-Out of the thousands of photos, only a handful actually have a JSON file. This
-is very disappointing and very unsatisfactory. In an attempt to fill in more
-metadata, use some scripts that take a leap of faith.
-
-### looks_like_a_date.args
-Some filenames look to have the date and time encoded in the filename. Use that
-to fill in the metadata tags.
-
-There is only one sanity check in this script to make sure legitimate looking
-dates are used. And that is to check that the year looks reasonable. For
-instance, "VID_32100102_123456.mp4" will be rejected but
-"IMG_20200901_123456.jpg" will not.
-
-This is error-prone and I did have to manually adjust some files after running
-this script.
-
-### burst.args
-This is a tweak to the script above in an attempt to extract the time from
-filenames of the form 00000IMG_00000_BURST20180901101751159_COVER.jpg.
-
-From (https://github.com/kaytat/exiftool-scripts-for-takeout/issues/1)
-
-### date_from_folder.args
-Even after the first leap of faith scripts, there are still loads of files that
-don't have any metadata. But Google Takeout arranges all files from the time
-they were created and so use that fact to add metadata.
-
-There are some big gotchas here.
-
-* Only supports YYYY-MM-DD and no times
-* Timezone might be off and so dates might be off by a day
-* Doesn't understand when the photo was taken only when Google Photos was made
-aware of it
-
-I felt this was better than nothing and so in my local media server, I have
-decided to keep the output of this scripts rather than have loads of pictures
-grouped together because most tools just use the file system time in lieu of any
-other times. And the file system time was when the files were extracted.
-
 ## Common themes in the scripts
 PhotoTakenTimeTimestamp is the field extracted from the JSON
 
--AllDates<PhotoTakenTimeTimestamp is used for JPEGs
+-AllDates\<PhotoTakenTimeTimestamp is used for JPEGs
 
--XMP-Exif:DateTimeOriginal<PhotoTakenTimeTimestamp and
--PNG:CreationTime<PhotoTakenTimeTimestamp are used for PNGs. The former allows
+-XMP-Exif:DateTimeOriginal\<PhotoTakenTimeTimestamp and
+-PNG:CreationTime\<PhotoTakenTimeTimestamp are used for PNGs. The former allows
 Lightroom to understand the tags and the latter allows Windows Photo Viewer
 to understand the tags.
 
--QuickTime:TrackCreateDate<PhotoTakenTimeTimestamp,
--QuickTime:TrackModifyDate<PhotoTakenTimeTimestamp,
--QuickTime:MediaCreateDate<PhotoTakenTimeTimestamp,
--QuickTime:MediaModifyDate<PhotoTakenTimeTimestamp are used for mp4 files. I'm
+-QuickTime:TrackCreateDate\<PhotoTakenTimeTimestamp,
+-QuickTime:TrackModifyDate\<PhotoTakenTimeTimestamp,
+-QuickTime:MediaCreateDate\<PhotoTakenTimeTimestamp,
+-QuickTime:MediaModifyDate\<PhotoTakenTimeTimestamp are used for mp4 files. I'm
 not sure which one is right so just went for a blanket approach.
 
 ConvertUnixTime() is used to convert the UTC timestamp in the JSON to a local
@@ -144,3 +103,23 @@ photos in there.
 
 ## Improvements
 The JSON files have album info. Maybe that can be merged too?
+
+# Obsolete scripts for kept for reference
+```
+burst.args
+date_from_folder.args
+jpg_to_mp4.args
+jpg_to_png.args
+looks_like_a_date.args
+png_to_jpg.args
+use_json.args
+was_jpg_now_mp4.args
+was_jpg_now_png.args
+was_png_now_jpg.args
+```
+
+For details on what these used to do, view the history of README.md. Most of
+these were helper scripts when EXIFTOOL complains about the filename vs the
+content.
+
+These also assume the older naming convention of the metadata files.
