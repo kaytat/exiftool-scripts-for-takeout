@@ -15,6 +15,8 @@ Update media with time info from metadata:
 use_json.bat path_to_exiftool path_to_photos
 ```
 
+There are also bash shell script equivalents for all 3.
+
 ## Recent Changes (Update 9/1/2025)
 
 ### Metadata filename extension changes
